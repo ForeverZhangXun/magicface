@@ -44,10 +44,23 @@ Page({
     wx.login({
       success (res) {
         if (res.code) {
-          HTTP.post(API.URL.api_login, {
+          console.log(res.code);
+          console.log(API.URL.api_login);
+          HTTP.get(API.URL.api_login, {
             nickName: info.userInfo.nickName,
             avatarUrl: info.userInfo.avatarUrl,
             code: res.code
+          }).then(res => {
+            console.log(res);
+            wx.showToast({
+              title: res.data,
+            })
+          }).catch(e => {
+            console.log(e);
+            wx.showToast({
+              title: e.errMsg,
+              icon: 'error'
+            })
           })
         } else {
           console.log('登录失败！' + res.errMsg);

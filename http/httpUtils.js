@@ -19,9 +19,11 @@ function resetHttpHeader(header) {
 }
 
 //处理发送的数据，对数据加密
-function handleSendData(params) {
+function handleSendData(params,url) {
   if (isDevelop) {
-    console.log("===== httpUtils 请求参数 =====", params);
+    console.log("===== httpUtils 请求参数 =====");
+    console.log("===== httpUtils 请求URL: " + url);
+    console.log(params);
   }
   return params;
 }
@@ -40,7 +42,7 @@ const request = (url, method, params) => {
     wx.request({
       url: url,
       method: method,
-      data: handleSendData(params),
+      data: handleSendData(params,url),
       header: getHeader(),
       success(res) {
         resolve(handleReturnData(res.data))
@@ -72,7 +74,7 @@ const uploadFile = (url, filePath, params) => {
       url: url,
       name: 'file',
       filePath: filePath,
-      formData: handleSendData(params),
+      formData: handleSendData(params,url),
       header: getHeader(),
       success(res) {
         resolve(handleReturnData(JSON.parse(res.data)))
