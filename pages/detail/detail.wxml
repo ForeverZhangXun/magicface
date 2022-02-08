@@ -1,14 +1,17 @@
 <!--pages/detail/detail.wxml-->
 <view class="container" style="align-content: flex-start;">
-  <image class="img-view" src="{{resultpath.length > 0 ? resultpath : imgpath}}" mode="aspectFit"></image>
+  <image class="img-view" src="{{resultpath.length > 0 ? resultpath : (imgpath.length > 0 ? imgpath : '../image/default.png')}}" mode="aspectFit"></image>
 </view>
-<block wx:if="{{!hasdone}}">
+<block wx:if="{{imgpath.length <= 0}}">
+  <button style="background-color: rgb(116, 228, 116);" bindtap="chooseImage">上传图片</button>
+</block>
+<block wx:elif="{{!hasdone && imgpath.length > 0}}">
   <button style="background-color: rgb(116, 228, 116);" bindtap="startCompress" disabled="{{virtualCurrency <= 0}}">开始转换</button>
 </block>
 <block wx:else>
   <view class="container">
     <button style="background-color: rgb(116, 228, 116); width: 40vw;" bindtap="saveToAlbum">保存到相册</button>
-    <button style="background-color: rgb(236, 200, 100); width: 40vw;" bindtap="sendFile">发送文件给朋友</button>
+    <button style="background-color: rgb(236, 200, 100); width: 40vw;" bindtap="sendFile">发送给朋友</button>
   </view>
 </block>
 <view class="user-info">

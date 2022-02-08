@@ -61,16 +61,19 @@ Page({
     var item = e.currentTarget.dataset.item
     var index = e.currentTarget.dataset.index
     console.log(item.value);
-    wx.chooseImage({
-      count: 1,
-      sizeType: ['compressed'],
-      sourceType: ['album', 'camera'],
-      success: function (res) {
-        console.log(res.tempFilePaths[0])
-        wx.navigateTo({
-          url: '../detail/detail?title=' + item.value + '&type=' + index + '&imgpath=' + res.tempFilePaths[0],
-        })
-      }
+    wx.navigateTo({
+      url: '../detail/detail?title=' + item.value + '&type=' + index,
     })
+    // wx.chooseImage({
+    //   count: 1,
+    //   sizeType: ['compressed'],
+    //   sourceType: ['album', 'camera'],
+    //   success: function (res) {
+    //     console.log(res.tempFilePaths[0])
+    //     wx.navigateTo({
+    //       url: '../detail/detail?title=' + item.value + '&type=' + index + '&imgpath=' + res.tempFilePaths[0],
+    //     })
+    //   }
+    // })
   }
 })

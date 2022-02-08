@@ -46,7 +46,7 @@ Page({
         if (res.code) {
           console.log(res.code);
           console.log(API.URL.api_login);
-          HTTP.get(API.URL.api_login, {
+          HTTP.post(API.URL.api_login, {
             nickName: info.userInfo.nickName,
             avatarUrl: info.userInfo.avatarUrl,
             code: res.code

@@ -24,7 +24,6 @@ Page({
     this.setData({
       title: options.title,
       type: options.type,
-      imgpath: options.imgpath,
     })
     wx.setNavigationBarTitle({
       title: this.data.title,
@@ -44,11 +43,37 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function (res) {
+    HTTP.post(API.URL.api_share, {type : 'share'})
+      .then(response => {
+        console.log(response);
+        if (response.data.flag == true) {
+          wx.showToast({
+            title: '分享成功',
+          })
+        }
+      }).catch(e => {
+        console.log(e);
+      })
     return {
       title: "一个好玩的小程序",
       path: "/pages/detail/detail?title=" + this.data.title + '&type=' + this.data.type + '&imgpath=' + this.data.resultpath,
       imageUrl: this.data.resultpath
     };
+  },
+
+  chooseImage() {
+    var that = this;
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+      success: function (res) {
+        console.log(res.tempFilePaths[0])
+        that.setData({
+          imgpath: res.tempFilePaths[0]
+        });
+      }
+    })
   },
   
   /**
