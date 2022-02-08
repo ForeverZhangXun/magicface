@@ -52,8 +52,17 @@ Page({
             code: res.code
           }).then(res => {
             console.log(res);
-            wx.showToast({
-              title: res.data,
+            var info = {
+              userId: res.data.userId,
+              token: res.data.token,
+              coinNum: res.data.coinNum
+            };
+            console.log(info);
+            wx.setStorageSync('login_key', info)
+            getApp().globalData.userInfo = info
+            HTTP.resetHttpHeader({ token: res.data.token })
+            wx.redirectTo({
+              url: '../index/index',
             })
           }).catch(e => {
             console.log(e);

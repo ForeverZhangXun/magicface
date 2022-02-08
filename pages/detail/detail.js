@@ -14,7 +14,7 @@ Page({
     imgpath: '',    // 图片路径
     hasdone: false, // 是否转化成功
     resultpath: '', // 转化后的图片路径
-    virtualCurrency: 0  //虚拟币个数
+    coinNum: 0  //虚拟币个数
   },
 
   /**
@@ -35,7 +35,7 @@ Page({
    */
   onShow: function () {
     this.setData({
-      virtualCurrency: getApp().globalData.userInfo.virtualCurrency
+      coinNum: getApp().globalData.userInfo.coinNum
     });
   },
 
@@ -101,9 +101,9 @@ Page({
           }
         });
         that.setData({
-          virtualCurrency: response.data.coinNum,
+          coinNum: response.data.coinNum,
         });
-        getApp().globalData.userInfo.virtualCurrency = response.data.coinNum;
+        getApp().globalData.userInfo.coinNum = response.data.coinNum;
         wx.showToast({
           title: '转换成功',
         });

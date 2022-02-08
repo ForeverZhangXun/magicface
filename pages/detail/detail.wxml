@@ -6,7 +6,7 @@
   <button style="background-color: rgb(116, 228, 116);" bindtap="chooseImage">上传图片</button>
 </block>
 <block wx:elif="{{!hasdone && imgpath.length > 0}}">
-  <button style="background-color: rgb(116, 228, 116);" bindtap="startCompress" disabled="{{virtualCurrency <= 0}}">开始转换</button>
+  <button style="background-color: rgb(116, 228, 116);" bindtap="startCompress" disabled="{{coinNum <= 0}}">开始转换</button>
 </block>
 <block wx:else>
   <view class="container">
@@ -16,7 +16,7 @@
 </block>
 <view class="user-info">
   <text style="font-size: small;">当前虚拟币个数: </text>
-  <text style="font-size: large; color: red;">{{virtualCurrency}}</text>
+  <text style="font-size: large; color: red;">{{coinNum}}</text>
   <text style="font-size: small;">，一个虚拟币可转换一次</text>
   <view style="font-size: small; margin-bottom: 20px;">每周首次分享小程序给好友或群可获取5个虚拟币</view>
   <view class="container">
