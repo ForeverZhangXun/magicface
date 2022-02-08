@@ -25,7 +25,7 @@ App({
     userInfo: {
       userId: "",
       token: "",
-      coinNum: 5
+      coinNum: 0
     }
   }
 })
