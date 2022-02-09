@@ -34,9 +34,28 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    this.setData({
-      coinNum: getApp().globalData.userInfo.coinNum
-    });
+    HTTP.get(API.URL.api_get_userinfo).then(res => {
+      console.log(res);
+      if (res && res.code == 0) {
+        this.setData({
+          coinNum: res.data.coinNum
+        });
+      } else {
+        this.setData({
+          coinNum: 0
+        });
+        wx.showToast({
+          title: '获取用户信息失败',
+          icon: 'none'
+        })
+      }
+    }).catch(e => {
+      wx.showToast({
+        title: '连接服务器失败，请重试',
+        icon: 'none'
+      })
+      console.log(e)
+    })
   },
 
   /**
@@ -46,7 +65,7 @@ Page({
     HTTP.post(API.URL.api_share, {type : 'share'})
       .then(response => {
         console.log(response);
-        if (response.data.flag == true) {
+        if (response && response.code == 0) {
           wx.showToast({
             title: '分享成功',
           })
@@ -86,27 +105,33 @@ Page({
       .then(response => {
         console.log(response);
         wx.hideLoading();
-        var number = Math.random();
-        wx.getFileSystemManager().writeFile({
-          filePath: wx.env.USER_DATA_PATH + '/pic' + number + '.png',
-          data:response.data.data,
-          encoding: 'base64',
-          success: res => {
-            that.setData({
-              resultpath: wx.env.USER_DATA_PATH + '/pic' + number + '.png'
-            });
-          },
-          fail: err => {
-            console.log(err);
-          }
-        });
-        that.setData({
-          coinNum: response.data.coinNum,
-        });
-        getApp().globalData.userInfo.coinNum = response.data.coinNum;
-        wx.showToast({
-          title: '转换成功',
-        });
+        if (response && response.code == 0) {
+          var number = Math.random();
+          wx.getFileSystemManager().writeFile({
+            filePath: wx.env.USER_DATA_PATH + '/pic' + number + '.png',
+            data:response.data.data,
+            encoding: 'base64',
+            success: res => {
+              that.setData({
+                resultpath: wx.env.USER_DATA_PATH + '/pic' + number + '.png'
+              });
+            },
+            fail: err => {
+              console.log(err);
+            }
+          });
+          that.setData({
+            coinNum: response.data.coinNum,
+          });
+          wx.showToast({
+            title: '转换成功',
+          });
+        } else {
+          wx.showToast({
+            title: response.msg,
+            icon: 'error'
+          })
+        }
       }).catch(e => {
         wx.hideLoading();
         wx.showToast({

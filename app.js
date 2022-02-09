@@ -4,8 +4,6 @@ const login_key = "login_key";
 
 App({
   onLaunch() {
-    
-    var that = this;
     const loginData = wx.getStorageSync(login_key);
 
     if (loginData) {
@@ -13,19 +11,16 @@ App({
       console.log(loginData);
       HTTP.resetHttpHeader({ token: loginData.token })
       this.globalData.userInfo = loginData;
+      
     } else {
       console.log('未登录');
-      //未登录，跳转登录界面
-      wx.redirectTo({
-        url: 'pages/login/login',
-      })
+      // //未登录，跳转登录界面
+      // wx.redirectTo({
+      //   url: 'pages/login/login',
+      // })
     }
   },
   globalData: {
-    userInfo: {
-      userId: "",
-      token: "",
-      coinNum: 0
-    }
+    userInfo: null
   }
 })

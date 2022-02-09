@@ -31,7 +31,14 @@ function handleSendData(params,url) {
 //处理返回数据，对数据解密
 function handleReturnData(res) {
   if (isDevelop) {
-    console.log("===== httpUtils 返回数据 =====", res.data);
+    console.log("===== httpUtils 返回数据 =====", res);
+  }
+  if (res.code == '10001') {
+    wx.setStorageSync('login_key', null);
+    getApp().globalData.userInfo = null;
+    wx.redirectTo({
+      url: '../login/login',
+    })
   }
   return res;
 }

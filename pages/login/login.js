@@ -23,6 +23,16 @@ Page({
     }
   },
 
+    /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+    wx.showToast({
+      title: '请登录后使用',
+      icon: 'none'
+    })
+  },
+
   getUserProfile(e) {
     // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认，开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
     var that = this;
@@ -52,23 +62,28 @@ Page({
             code: res.code
           }).then(res => {
             console.log(res);
-            var info = {
-              userId: res.data.userId,
-              token: res.data.token,
-              coinNum: res.data.coinNum
-            };
-            console.log(info);
-            wx.setStorageSync('login_key', info)
-            getApp().globalData.userInfo = info
-            HTTP.resetHttpHeader({ token: res.data.token })
-            wx.redirectTo({
-              url: '../index/index',
-            })
+            // TODO: code在外边
+            if (res.code == 0) {
+              var info = {
+                userId: res.data.userId,
+                token: res.data.token,
+              };
+              console.log(info);
+              wx.setStorageSync('login_key', info)
+              getApp().globalData.userInfo = info
+              HTTP.resetHttpHeader({ token: res.data.token })
+              wx.navigateBack();
+            } else {
+              wx.showToast({
+                title: '登录失败，请重试',
+                icon: 'none'
+              })
+            }
           }).catch(e => {
             console.log(e);
             wx.showToast({
-              title: e.errMsg,
-              icon: 'error'
+              title: e.errMsg ? e.errMsg : '登录失败，请重试',
+              icon: 'none'
             })
           })
         } else {
