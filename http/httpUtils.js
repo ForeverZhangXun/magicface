@@ -36,6 +36,7 @@ function handleReturnData(res) {
   if (res.code == '10001') {
     wx.setStorageSync('login_key', null);
     getApp().globalData.userInfo = null;
+    httpConfig.httpHeader = null;
     wx.redirectTo({
       url: '../login/login',
     })

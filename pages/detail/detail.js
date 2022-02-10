@@ -36,7 +36,7 @@ Page({
   onShow: function () {
     HTTP.get(API.URL.api_get_userinfo).then(res => {
       console.log(res);
-      if (res && res.code == 0) {
+      if (res && res.code == 200) {
         this.setData({
           coinNum: res.data.coinNum
         });
@@ -65,10 +65,8 @@ Page({
     HTTP.post(API.URL.api_share, {type : 'share'})
       .then(response => {
         console.log(response);
-        if (response && response.code == 0) {
-          wx.showToast({
-            title: '分享成功',
-          })
+        if (response && response.code == 200) {
+          console.log('分享成功');
         }
       }).catch(e => {
         console.log(e);
@@ -101,11 +99,11 @@ Page({
   startCompress() {
     var that = this;
     wx.showLoading({mask: true});
-    HTTP.uploadFile(API.URL.api_start_change, this.data.imgpath, {'type': '0'})
+    HTTP.uploadFile(API.URL.api_start_change, this.data.imgpath, {'type': that.type})
       .then(response => {
         console.log(response);
         wx.hideLoading();
-        if (response && response.code == 0) {
+        if (response && response.code == 200) {
           var number = Math.random();
           wx.getFileSystemManager().writeFile({
             filePath: wx.env.USER_DATA_PATH + '/pic' + number + '.png',

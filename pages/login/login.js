@@ -62,8 +62,7 @@ Page({
             code: res.code
           }).then(res => {
             console.log(res);
-            // TODO: code在外边
-            if (res.code == 0) {
+            if (res.code == 200) {
               var info = {
                 userId: res.data.userId,
                 token: res.data.token,
