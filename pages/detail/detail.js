@@ -99,7 +99,7 @@ Page({
   startCompress() {
     var that = this;
     wx.showLoading({mask: true});
-    HTTP.uploadFile(API.URL.api_start_change, this.data.imgpath, {'type': that.type})
+    HTTP.uploadFile(API.URL.api_start_change, this.data.imgpath, {'type': that.data.type})
       .then(response => {
         console.log(response);
         wx.hideLoading();
@@ -107,7 +107,7 @@ Page({
           var number = Math.random();
           wx.getFileSystemManager().writeFile({
             filePath: wx.env.USER_DATA_PATH + '/pic' + number + '.png',
-            data:response.data.data,
+            data:response.data.base64,
             encoding: 'base64',
             success: res => {
               that.setData({
