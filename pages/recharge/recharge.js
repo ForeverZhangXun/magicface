@@ -1,4 +1,8 @@
 // pages/recharge/recharge.js
+
+const HTTP = require('../../http/httpUtils')
+const API = require('../../http/apiConfig')
+
 Page({
 
   /**
@@ -47,13 +51,46 @@ Page({
 
   confirm() {
     console.log(this.data.inputValue)
-    getApp().globalData.userInfo.virtualCurrency = Number(getApp().globalData.userInfo.virtualCurrency) + Number(this.data.inputValue);
-    wx.showToast({
-      title: '充值成功',
-      duration: 1000
-    });
-    wx.navigateBack();
-    
+    var amount = Number(this.data.inputValue) * 100
+    wx.showLoading({mask: true})
+    HTTP.post(API.URL.api_pay_info, {amount: amount}).then(res => {
+      wx.hideLoading();
+      if (res && res.code == 200) {
+        wx.requestPayment({
+          nonceStr: res.nonceStr,
+          package: res.package,
+          paySign: res.paySign,
+          timeStamp: res.timeStamp,
+          signType: 'RSA',
+          success: res => {
+            wx.showToast({
+              title: '充值成功',
+              complete: function() {
+                wx.navigateBack();
+              }
+            });
+          },
+          fail: e => {
+            console.log(e)
+            wx.showToast({
+              title: '支付失败',
+              icon: 'error'
+            })
+          }
+        })
+      } else {
+        wx.showToast({
+          title: res.msg,
+          icon: 'none'
+        })
+      }
+    }).catch(e => {
+      wx.hideLoading();
+      wx.showToast({
+        title: '连接服务器失败，请重试',
+        icon: 'none'
+      })
+    })
   },
 
   /**

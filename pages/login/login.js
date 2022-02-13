@@ -95,7 +95,8 @@ Page({
       fail: (err) => {
         console.log(err);
         wx.showToast({
-          title: '登录失败!',
+          title: '连接服务器失败，请重试',
+          icon: 'none'
         })
       }
     });
