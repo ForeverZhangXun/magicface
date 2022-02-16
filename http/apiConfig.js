@@ -1,6 +1,6 @@
 /* 接口配置 */
 
-const API_BASE_URL = 'https://magicface.shop:8888';
+const API_BASE_URL = 'https://magicface.shop:443';
 
 /* 接口地址： */
 const URL = {

@@ -1,6 +1,6 @@
 <!--pages/detail/detail.wxml-->
 <view class="container" style="align-content: flex-start;">
-  <image class="img-view" src="{{resultpath.length > 0 ? resultpath : (imgpath.length > 0 ? imgpath : '../image/default.png')}}" mode="aspectFit"></image>
+  <image class="img-view" src="{{resultpath.length > 0 ? resultpath : (imgpath.length > 0 ? imgpath : '../image/default.jpg')}}" mode="aspectFit"></image>
 </view>
 <block wx:if="{{imgpath.length <= 0}}">
   <button style="background-color: rgb(116, 228, 116);" bindtap="chooseImage">上传图片</button>

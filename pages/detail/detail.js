@@ -2,6 +2,7 @@
 
 const HTTP = require('../../http/httpUtils')
 const API = require('../../http/apiConfig')
+const Base64Binary = require('../utils/util')
 
 Page({
 
@@ -99,17 +100,21 @@ Page({
   startCompress() {
     var that = this;
     wx.showLoading({mask: true});
+    // console.log('data:image/png;base64,' + wx.getFileSystemManager().readFileSync(this.data.imgpath, 'base64'));
     HTTP.uploadFile(API.URL.api_start_change, this.data.imgpath, {'type': that.data.type})
       .then(response => {
         console.log(response);
         wx.hideLoading();
-        if (response && response.code == 200) {
+        if (response.result) {
+          console.log(Base64Binary.decodeArrayBuffer(response.result));
           var number = Math.random();
           wx.getFileSystemManager().writeFile({
             filePath: wx.env.USER_DATA_PATH + '/pic' + number + '.png',
-            data:response.data.base64,
-            encoding: 'base64',
-            success: res => {
+            data:Base64Binary.decodeArrayBuffer(response.result),
+            encoding: 'binary',
+            success: () => {
+              console.log('success')
+              console.log(wx.env.USER_DATA_PATH + '/pic' + number + '.png')
               that.setData({
                 resultpath: wx.env.USER_DATA_PATH + '/pic' + number + '.png'
               });
@@ -132,10 +137,6 @@ Page({
         }
       }).catch(e => {
         wx.hideLoading();
-        wx.showToast({
-          title: '转换失败',
-          icon: 'error'
-        });
         console.log(e);
       });
   },
