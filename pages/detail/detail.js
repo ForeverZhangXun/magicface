@@ -2,7 +2,6 @@
 
 const HTTP = require('../../http/httpUtils')
 const API = require('../../http/apiConfig')
-const Base64Binary = require('../utils/util')
 
 Page({
 
@@ -103,35 +102,43 @@ Page({
     // console.log('data:image/png;base64,' + wx.getFileSystemManager().readFileSync(this.data.imgpath, 'base64'));
     HTTP.uploadFile(API.URL.api_start_change, this.data.imgpath, {'type': that.data.type})
       .then(response => {
-        console.log(response);
         wx.hideLoading();
-        if (response.result) {
-          console.log(Base64Binary.decodeArrayBuffer(response.result));
-          var number = Math.random();
-          wx.getFileSystemManager().writeFile({
-            filePath: wx.env.USER_DATA_PATH + '/pic' + number + '.png',
-            data:Base64Binary.decodeArrayBuffer(response.result),
-            encoding: 'binary',
-            success: () => {
-              console.log('success')
-              console.log(wx.env.USER_DATA_PATH + '/pic' + number + '.png')
-              that.setData({
-                resultpath: wx.env.USER_DATA_PATH + '/pic' + number + '.png'
-              });
-            },
-            fail: err => {
-              console.log(err);
-            }
-          });
+        console.log(response)
+        if (response.code == 200) {
+          var imgData = JSON.parse(response.data.base64)
+          if (imgData.result) {
+            var number = Math.random();
+            wx.getFileSystemManager().writeFile({
+              filePath: wx.env.USER_DATA_PATH + '/pic' + number + '.png',
+              data:imgData.result,
+              encoding: 'base64',
+              success: () => {
+                that.setData({
+                  resultpath: wx.env.USER_DATA_PATH + '/pic' + number + '.png',
+                  hasdone: true,
+                  coinNum: response.data.coinNum,
+                });
+                wx.showToast({
+                  title: '转换成功',
+                });
+              },
+              fail: err => {
+                console.log(err);
+              }
+            });
+          } else {
+            console.log(imgData)
+            wx.showToast({
+              title: '转换失败',
+              icon: 'error'
+            })
+          }
           that.setData({
             coinNum: response.data.coinNum,
-          });
-          wx.showToast({
-            title: '转换成功',
-          });
+          })
         } else {
           wx.showToast({
-            title: response.msg,
+            title: '转换失败',
             icon: 'error'
           })
         }

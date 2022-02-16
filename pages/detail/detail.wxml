@@ -6,7 +6,10 @@
   <button style="background-color: rgb(116, 228, 116);" bindtap="chooseImage">上传图片</button>
 </block>
 <block wx:elif="{{!hasdone && imgpath.length > 0}}">
-  <button style="background-color: rgb(116, 228, 116);" bindtap="startCompress" >开始转换</button>
+  <view class="container">
+    <button style="background-color: rgb(236, 200, 100); width: 40vw;" bindtap="chooseImage">重新上传</button>
+    <button style="background-color: rgb(116, 228, 116); width: 40vw;" bindtap="startCompress" >开始转换</button>
+  </view>
 </block>
 <block wx:else>
   <view class="container">
