@@ -79,8 +79,9 @@ Page({
           }
         })
       } else {
+        console.log(res)
         wx.showToast({
-          title: res.msg,
+          title: res.msg ? res.msg : '服务器异常',
           icon: 'none'
         })
       }

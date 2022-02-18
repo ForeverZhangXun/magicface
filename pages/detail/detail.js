@@ -99,11 +99,9 @@ Page({
   startCompress() {
     var that = this;
     wx.showLoading({mask: true});
-    // console.log('data:image/png;base64,' + wx.getFileSystemManager().readFileSync(this.data.imgpath, 'base64'));
     HTTP.uploadFile(API.URL.api_start_change, this.data.imgpath, {'type': that.data.type})
       .then(response => {
         wx.hideLoading();
-        console.log(response)
         if (response.code == 200) {
           var imgData = JSON.parse(response.data.base64)
           if (imgData.result) {
